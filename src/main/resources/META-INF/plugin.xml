@@ -5,11 +5,28 @@
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
-    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
+        <preloadingActivity implementation="org.gap.ijplugins.spring.tools.StsPreloadingActivity" />
+        <completion.contributor
+                implementationClass="org.wso2.lsp4intellij.contributors.LSPCompletionContributor"
+                id="LSPCompletionContributor" language="any"/>
+        <gotoSymbolContributor
+                implementation="org.wso2.lsp4intellij.contributors.symbol.LSPSymbolContributor"
+                id="LSPSymbolContributor"/>
+        <externalAnnotator id="LSPAnnotator_properties"
+                           implementationClass="org.wso2.lsp4intellij.contributors.annotator.LSPAnnotator" language="Properties"/>
+        <externalAnnotator id="LSPAnnotator_yaml"
+                           implementationClass="org.wso2.lsp4intellij.contributors.annotator.LSPAnnotator" language="yaml"/>
     </extensions>
+
+    <application-components>
+        <component>
+            <implementation-class>org.wso2.lsp4intellij.IntellijLanguageClient</implementation-class>
+        </component>
+    </application-components>
 
     <actions>
         <!-- Add your actions here -->

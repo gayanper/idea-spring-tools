@@ -65,7 +65,7 @@ bintray {
     publish = true
     override = true
     pkg(delegateClosureOf<com.jfrog.bintray.gradle.BintrayExtension.PackageConfig> {
-        repo = "idea-plugins"
+        repo = "idea-spring-tools"
         name = intellij.pluginName
         setLicenses("Apache-2.0")
         userOrg = System.getenv("BINTRAY_USER")

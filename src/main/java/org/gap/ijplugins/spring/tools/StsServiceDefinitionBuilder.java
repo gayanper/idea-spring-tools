@@ -1,7 +1,7 @@
 package org.gap.ijplugins.spring.tools;
 
 import com.google.common.collect.ImmutableList;
-import com.intellij.ide.plugins.PluginManager;
+import com.intellij.ide.plugins.PluginManagerCore;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.PluginId;
 import org.wso2.lsp4intellij.client.languageserver.serverdefinition.RawCommandServerDefinition;
@@ -10,6 +10,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,7 +54,11 @@ public final class StsServiceDefinitionBuilder {
 
         try {
             final StringBuilder classPathBuilder = new StringBuilder();
-            final File root = PluginManager.getPlugin(PluginId.getId("org.gap.ijplugins.spring.idea-spring-tools")).getPath();
+            final File root = Arrays.stream(PluginManagerCore.getPlugins())
+                    .filter(d -> PluginId.getId("org.gap.ijplugins.spring.idea-spring-tools").equals(d.getPluginId()))
+                    .findFirst()
+                    .map(d -> d.getPath())
+                    .orElseThrow(() -> new IllegalStateException("PluginDescriptor for org.gap.ijplugins.spring.idea-spring-tools not found."));
             final Path javaHomePath = Paths.get(javaHome);
 
             classPathBuilder

@@ -22,7 +22,7 @@ val languageServer by configurations.creating
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("com.github.ballerina-platform:lsp4intellij:0.94.1")
+    implementation("com.github.ballerina-platform:lsp4intellij:0.94.2")
     implementation("org.springframework.ide.vscode:commons-java:1.15.0-SNAPSHOT")
     languageServer("org.springframework.ide.vscode:spring-boot-language-server:1.15.0-SNAPSHOT:exec") {
         isTransitive = false

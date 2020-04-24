@@ -1,6 +1,7 @@
 package org.gap.ijplugins.spring.tools;
 
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
+import org.gap.ijplugins.spring.tools.graphics.StsIcons;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

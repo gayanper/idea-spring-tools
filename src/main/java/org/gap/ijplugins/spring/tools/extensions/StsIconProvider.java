@@ -1,7 +1,7 @@
 package org.gap.ijplugins.spring.tools.extensions;
 
 import org.eclipse.lsp4j.SymbolKind;
-import org.gap.ijplugins.spring.tools.StsIcons;
+import org.gap.ijplugins.spring.tools.graphics.StsIcons;
 import org.wso2.lsp4intellij.contributors.icon.LSPDefaultIconProvider;
 
 import javax.swing.*;

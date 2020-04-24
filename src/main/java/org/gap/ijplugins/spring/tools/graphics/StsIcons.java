@@ -1,4 +1,4 @@
-package org.gap.ijplugins.spring.tools;
+package org.gap.ijplugins.spring.tools.graphics;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;

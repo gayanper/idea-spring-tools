@@ -12,7 +12,7 @@ plugins {
 
 group = "org.gap.ijplugins.spring.ideaspringtools"
 version = "1.0.0-SNAPSHOT"
-val snapshotStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd.HH.mm.ss.SSS"))
+val snapshotStr: String = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd.HH.mm.ss.SSS"))
 
 repositories {
     mavenCentral()
@@ -74,6 +74,7 @@ bintray {
         vcsUrl = "https://github.com/gayanper/idea-spring-tools"
         version(delegateClosureOf<com.jfrog.bintray.gradle.BintrayExtension.VersionConfig> {
             name = snapshotStr
+            setVersion(snapshotStr)
         })
 
         filesSpec(delegateClosureOf<com.jfrog.bintray.gradle.tasks.RecordingCopyTask> {

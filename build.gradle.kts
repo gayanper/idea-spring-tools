@@ -7,10 +7,12 @@ plugins {
     id("org.jetbrains.intellij") version "0.4.16"
     kotlin("jvm") version "1.3.61"
     id("com.jfrog.bintray") version "1.8.4"
+    id("net.researchgate.release") version "2.6.0"
 }
 
 group = "org.gap.ijplugins.spring.ideaspringtools"
-version = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd.HH.mm.ss.SSS"))
+version = "1.0.0-SNAPSHOT"
+val snapshotStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd.HH.mm.ss.SSS"))
 
 repositories {
     mavenCentral()
@@ -71,14 +73,18 @@ bintray {
         userOrg = System.getenv("BINTRAY_USER")
         vcsUrl = "https://github.com/gayanper/idea-spring-tools"
         version(delegateClosureOf<com.jfrog.bintray.gradle.BintrayExtension.VersionConfig> {
-            name = project.version.toString()
+            name = snapshotStr
         })
 
         filesSpec(delegateClosureOf<com.jfrog.bintray.gradle.tasks.RecordingCopyTask> {
             from("build/distributions")
             into(".")
-            rename ("idea-spring-tools.zip","idea-spring-tools-${project.version}.zip" )
+            rename ("idea-spring-tools.zip","idea-spring-tools-${snapshotStr}.zip" )
         })
 
     })
+}
+
+release {
+    failOnUnversionedFiles = false
 }

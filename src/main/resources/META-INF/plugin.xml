@@ -2,6 +2,9 @@
     <id>org.gap.ijplugins.spring.idea-spring-tools</id>
     <name>Idea Spring Tools</name>
     <vendor email="gayanper@outlook.com">GAP</vendor>
+    <description>
+        Spring support for IntelliJ CE based on the STS4 Language Server
+    </description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->

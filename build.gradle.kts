@@ -46,7 +46,7 @@ tasks {
     }
 }
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
-    setUntilBuild("201.*")
+    setUntilBuild("203.*")
     setSinceBuild("183.3647.12")
 }
 

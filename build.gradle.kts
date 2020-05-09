@@ -87,4 +87,5 @@ bintray {
 release {
     failOnUnversionedFiles = false
     failOnSnapshotDependencies = false
+    tagTemplate = "$version"
 }

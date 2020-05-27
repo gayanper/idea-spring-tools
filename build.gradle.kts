@@ -11,7 +11,9 @@ plugins {
 }
 
 group = "org.gap.ijplugins.spring.ideaspringtools"
-val snapshotStr: String = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd.HH.mm.ss.SSS"))
+if(version.toString().endsWith("SNAPSHOT")) {
+    version = version.toString().replace("SNAPSHOT", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd.HH.mm.ss.SSS")))
+}
 
 repositories {
     mavenCentral()
@@ -72,13 +74,12 @@ bintray {
         userOrg = System.getenv("BINTRAY_USER")
         vcsUrl = "https://github.com/gayanper/idea-spring-tools"
         version(delegateClosureOf<com.jfrog.bintray.gradle.BintrayExtension.VersionConfig> {
-            name = snapshotStr
+            name = version.toString()
         })
 
         filesSpec(delegateClosureOf<com.jfrog.bintray.gradle.tasks.RecordingCopyTask> {
             from("build/distributions")
             into(".")
-            rename ("idea-spring-tools.zip","idea-spring-tools-${snapshotStr}.zip" )
         })
 
     })

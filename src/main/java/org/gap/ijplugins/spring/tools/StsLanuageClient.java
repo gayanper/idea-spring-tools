@@ -40,6 +40,7 @@ import org.eclipse.lsp4j.Location;
 import org.eclipse.lsp4j.MarkupContent;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
+import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.jsonrpc.messages.Tuple;
 import org.gap.ijplugins.spring.tools.highlight.HighlightProcessor;
 import org.gap.ijplugins.spring.tools.highlight.InlayHighlightProcessor;
@@ -58,6 +59,7 @@ import org.wso2.lsp4intellij.utils.FileUtils;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
+import java.util.stream.Collectors;
 
 import static org.gap.ijplugins.spring.tools.ApplicationUtils.runReadAction;
 
@@ -207,20 +209,21 @@ class StsLanuageClient extends DefaultLanguageClient implements STS4LanguageClie
     }
 
     @Override
-    public CompletableFuture<List<TypeDescriptorData>> javaSubTypes(JavaTypeHierarchyParams params) {
+    public CompletableFuture<List<Either<TypeDescriptorData, TypeData>>> javaSubTypes(JavaTypeHierarchyParams params) {
         return runReadAction(() -> {
             return CompletableFuture.completedFuture(findClass(params).map(clazz -> {
                 List<PsiClass> subtypes = Lists.newCopyOnWriteArrayList(ClassInheritorsSearch.search(clazz, true).findAll());
                 if(params.isIncludeFocusType()) {
                     subtypes.add(clazz);
                 }
-                return typeDescriptorProvider.descriptors(subtypes.toArray(new PsiClass[0]));
+                return typeDescriptorProvider.descriptors(subtypes.toArray(new PsiClass[0]))
+                        .stream().map(Either::<TypeDescriptorData, TypeData>forLeft).collect(Collectors.toList());
             }).orElse(Collections.emptyList()));
         });
     }
 
     @Override
-    public CompletableFuture<List<TypeDescriptorData>> javaSuperTypes(JavaTypeHierarchyParams params) {
+    public CompletableFuture<List<Either<TypeDescriptorData, TypeData>>> javaSuperTypes(JavaTypeHierarchyParams params) {
         return runReadAction(() -> {
             return CompletableFuture.completedFuture(findClass(params).map(clazz -> {
                 List<TypeDescriptorData> descriptors = typeDescriptorProvider.descriptors(clazz.getSupers());
@@ -228,9 +231,9 @@ class StsLanuageClient extends DefaultLanguageClient implements STS4LanguageClie
                     List<TypeDescriptorData> supers = new ArrayList<>(descriptors.size() + 1);
                     supers.addAll(typeDescriptorProvider.descriptors(new PsiClass[] { clazz }));
                     supers.addAll(descriptors);
-                    return supers;
+                    return supers.stream().map(Either::<TypeDescriptorData, TypeData>forLeft).collect(Collectors.toList());
                 } else {
-                    return descriptors;
+                    return descriptors.stream().map(Either::<TypeDescriptorData, TypeData>forLeft).collect(Collectors.toList());
                 }
             }).orElse(Collections.emptyList()));
         });

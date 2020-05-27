@@ -24,17 +24,17 @@ val languageServer by configurations.creating
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("com.github.ballerina-platform:lsp4intellij:master-SNAPSHOT")
-    implementation("org.springframework.ide.vscode:commons-java:1.15.0-SNAPSHOT")
-    languageServer("org.springframework.ide.vscode:spring-boot-language-server:1.15.0-SNAPSHOT:exec") {
+    implementation("org.springframework.ide.vscode:commons-java:1.18.0-SNAPSHOT")
+    languageServer("org.springframework.ide.vscode:spring-boot-language-server:1.18.0-SNAPSHOT:exec") {
         isTransitive = false
     }
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = "2018.3"
+    version = "2020.1"
     pluginName = "idea-spring-tools"
-    setPlugins("IntelliLang")
+    setPlugins("IntelliLang", "java")
 }
 tasks {
     compileKotlin {
@@ -46,7 +46,7 @@ tasks {
 }
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
     setUntilBuild("203.*")
-    setSinceBuild("183.3647.12")
+    setSinceBuild("193.*")
 }
 
 tasks.getByName<PrepareSandboxTask>("prepareSandbox").doLast {

@@ -50,14 +50,14 @@ public class StsLabelProvider extends LSPDefaultLabelProvider {
         try {
             fileByIoFile = LocalFileSystem.getInstance().
                     findFileByIoFile(new File((new URL(symbolInformation.getLocation().getUri())).getFile()));
+
         } catch (MalformedURLException e) {
             fileByIoFile = null;
             LOGGER.error(e);
         }
 
-        return Optional.ofNullable(fileByIoFile).map(f -> {
-            final VirtualFile sourceRootForFile = ProjectFileIndex.getInstance(project).getSourceRootForFile(f);
-            return VfsUtilCore.findRelativePath(sourceRootForFile, f, File.separatorChar);
-        }).map(s -> String.format("(%s)", s)).orElse("");
+        return Optional.ofNullable(fileByIoFile).flatMap(f -> Optional.ofNullable(ProjectFileIndex.getInstance(project).getSourceRootForFile(f))
+                .map(s -> VfsUtilCore.findRelativePath(s, f, File.separatorChar))
+        ).map(s -> String.format("(%s)", s)).orElse("");
     }
 }

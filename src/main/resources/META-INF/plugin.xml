@@ -32,6 +32,9 @@
     </application-components>
 
     <actions>
-        <!-- Add your actions here -->
+        <action id="org.gap.ijplugins.spring.tools.livedata.ManageProcessConnectionsAction"
+                class="org.gap.ijplugins.spring.tools.livedata.ManageProcessConnectionsAction">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
     </actions>
 </idea-plugin>

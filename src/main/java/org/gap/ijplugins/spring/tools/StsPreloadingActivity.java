@@ -40,8 +40,8 @@ import java.util.stream.Stream;
 public class StsPreloadingActivity extends PreloadingActivity {
 
     private static final Logger LOGGER = Logger.getInstance(StsPreloadingActivity.class);
-    private static final String PTRN_JAVA = "java";
-    public static final String LANG_ID_JAVA = PTRN_JAVA;
+    public static final String EXT_PTRN_JAVA = "java";
+    public static final String LANG_ID_JAVA = EXT_PTRN_JAVA;
     public static final String LANG_ID_XML = "xml";
     public static final String LANG_ID_PROPERTIES = "spring-boot-properties";
     public static final String LANG_ID_YAML = "spring-boot-properties-yaml";
@@ -52,7 +52,7 @@ public class StsPreloadingActivity extends PreloadingActivity {
 
     @Override
     public void preload(@NotNull ProgressIndicator progressIndicator) {
-        if (Strings.isNullOrEmpty(System.getProperty(PTRN_JAVA + ".home"))) {
+        if (Strings.isNullOrEmpty(System.getProperty(EXT_PTRN_JAVA + ".home"))) {
             LOGGER.error("No java home found in system properties");
             return;
         }
@@ -67,12 +67,12 @@ public class StsPreloadingActivity extends PreloadingActivity {
 
         // construct extensions patterns for now from system properties if available
         final List<String> extensions = Stream.concat(Arrays.stream(System.getProperty("sts4.boot.extensions", "").split(",")),
-                Arrays.stream(new String[]{PTRN_JAVA, PTRN_APPLICATION_YAML, PTRN_APPLICATION_YML, PTRN_CONTEXT_XML,
+                Arrays.stream(new String[]{EXT_PTRN_JAVA, PTRN_APPLICATION_YAML, PTRN_APPLICATION_YML, PTRN_CONTEXT_XML,
                         PTRN_APPLICATION_PROPERTIES})).filter(i -> !i.isEmpty()).collect(Collectors.toList());
 
         IntellijLanguageClient.addServerDefinition(
                 StsServiceDefinitionBuilder.forExtensions(extensions.stream().collect(Collectors.joining(",")))
-                        .withLanguageMapping(PTRN_JAVA, LANG_ID_JAVA)
+                        .withLanguageMapping(EXT_PTRN_JAVA, LANG_ID_JAVA)
                         .withLanguageMapping("yaml", LANG_ID_YAML)
                         .withLanguageMapping("yml", LANG_ID_YAML)
                         .withLanguageMapping("xml", LANG_ID_XML)

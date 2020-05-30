@@ -17,7 +17,9 @@ if(version.toString().endsWith("SNAPSHOT")) {
 
 repositories {
     mavenCentral()
-    maven ("https://jitpack.io")
+//    mavenLocal()
+//    maven ("https://jitpack.io")
+    maven ("https://dl.bintray.com/gayanper/maven")
     maven ("https://repo.spring.io/libs-snapshot/")
 }
 
@@ -25,7 +27,9 @@ val languageServer by configurations.creating
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("com.github.ballerina-platform:lsp4intellij:master-SNAPSHOT")
+    //implementation("com.github.ballerina-platform:lsp4intellij:0.94.1-SNAPSHOT")
+    implementation("com.github.ballerina-platform:lsp4intellij:0.94.1-20200530.20.33.48.414")
+
     implementation("org.springframework.ide.vscode:commons-java:1.18.0-SNAPSHOT")
     languageServer("org.springframework.ide.vscode:spring-boot-language-server:1.18.0-SNAPSHOT:exec") {
         isTransitive = false

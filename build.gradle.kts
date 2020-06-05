@@ -28,7 +28,7 @@ val languageServer by configurations.creating
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     //implementation("com.github.ballerina-platform:lsp4intellij:0.94.1-SNAPSHOT")
-    implementation("com.github.ballerina-platform:lsp4intellij:0.94.1-20200530.21.06.22.680")
+    implementation("com.github.ballerina-platform:lsp4intellij:0.94.1-20200604.18.27.53.863")
 
     implementation("org.springframework.ide.vscode:commons-java:1.18.0-SNAPSHOT")
     languageServer("org.springframework.ide.vscode:spring-boot-language-server:1.18.0-SNAPSHOT:exec") {

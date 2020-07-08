@@ -105,15 +105,23 @@ public class ClasspathListener {
             final String outputUrl = CommonUtils.outputDir(m);
             final String testOutputUrl = CommonUtils.testOutputDir(m);
 
-            moduleRootManager.getSourceRoots(JavaSourceRootType.SOURCE).stream()
-                    .map(f -> mapSourceRoot(f, outputUrl, true, false)).forEach(cpes::add);
-            moduleRootManager.getSourceRoots(JavaResourceRootType.RESOURCE).stream()
-                    .map(f -> mapSourceRoot(f, outputUrl, false, false)).forEach(cpes::add);
+            if(outputUrl != null) {
+                moduleRootManager.getSourceRoots(JavaSourceRootType.SOURCE).stream()
+                        .map(f -> mapSourceRoot(f, outputUrl, true, false)).forEach(cpes::add);
+                moduleRootManager.getSourceRoots(JavaResourceRootType.RESOURCE).stream()
+                        .map(f -> mapSourceRoot(f, outputUrl, false, false)).forEach(cpes::add);
+            } else {
+                LOGGER.debug("outputUrl is null for module " + m.getName());
+            }
 
-            moduleRootManager.getSourceRoots(JavaSourceRootType.TEST_SOURCE).stream()
-                    .map(f -> mapSourceRoot(f, testOutputUrl, true, true)).forEach(cpes::add);
-            moduleRootManager.getSourceRoots(JavaResourceRootType.TEST_RESOURCE).stream()
-                    .map(f -> mapSourceRoot(f, testOutputUrl, false, true)).forEach(cpes::add);
+            if(testOutputUrl != null) {
+                moduleRootManager.getSourceRoots(JavaSourceRootType.TEST_SOURCE).stream()
+                        .map(f -> mapSourceRoot(f, testOutputUrl, true, true)).forEach(cpes::add);
+                moduleRootManager.getSourceRoots(JavaResourceRootType.TEST_RESOURCE).stream()
+                        .map(f -> mapSourceRoot(f, testOutputUrl, false, true)).forEach(cpes::add);
+            } else {
+                LOGGER.debug("testOutputUrl is null for module " + m.getName());
+            }
         });
 
         projectRootManager.orderEntries().withoutSdk().forEachLibrary(l -> {

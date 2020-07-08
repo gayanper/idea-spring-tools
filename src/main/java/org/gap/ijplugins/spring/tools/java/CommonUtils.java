@@ -27,6 +27,7 @@ package org.gap.ijplugins.spring.tools.java;
 import com.intellij.openapi.compiler.CompilerPaths;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.ide.vscode.commons.protocol.java.Classpath.CPE;
 
 import java.util.Optional;
@@ -45,10 +46,12 @@ public class CommonUtils {
         return Optional.empty();
     }
 
+    @Nullable
     public static String outputDir(Module module) {
         return CompilerPaths.getModuleOutputPath(module, false);
     }
 
+    @Nullable
     public static String testOutputDir(Module module) {
         return CompilerPaths.getModuleOutputPath(module, true);
     }

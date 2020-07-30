@@ -19,7 +19,7 @@ repositories {
     mavenCentral()
 //    mavenLocal()
     maven ("https://jitpack.io")
-//    maven ("https://dl.bintray.com/gayanper/maven")
+    maven ("https://dl.bintray.com/gayanper/maven")
     maven ("https://repo.spring.io/libs-snapshot/")
 }
 
@@ -27,11 +27,11 @@ val languageServer by configurations.creating
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("com.github.ballerina-platform:lsp4intellij:master-SNAPSHOT")
-    //implementation("com.github.ballerina-platform:lsp4intellij:0.94.1-20200604.18.27.53.863")
+    //implementation("com.github.ballerina-platform:lsp4intellij:0.94.2")
+    implementation("com.github.ballerina-platform:lsp4intellij:0.94.1-20200604.18.27.53.863")
 
     implementation("org.springframework.ide.vscode:commons-java:1.18.0-SNAPSHOT")
-    languageServer("org.springframework.ide.vscode:spring-boot-language-server:1.18.0-SNAPSHOT:exec") {
+    languageServer("org.springframework.ide.vscode:spring-boot-language-server:1.21.0-SNAPSHOT:exec") {
         isTransitive = false
     }
 }

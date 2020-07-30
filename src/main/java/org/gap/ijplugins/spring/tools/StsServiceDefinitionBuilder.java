@@ -85,8 +85,6 @@ public final class StsServiceDefinitionBuilder {
                     .orElseThrow(() -> new IllegalStateException("PluginDescriptor for org.gap.ijplugins.spring.idea-spring-tools not found."));
             final Path javaHomePath = Paths.get(javaHome);
 
-            classPathBuilder
-                    .append(new File(root, "lib/server/language-server.jar").getPath());
             if (Prerequisities.isJava8()) {
                 Path toolsJar = javaHomePath.resolve(Paths.get("lib", "tools.jar"));
                 if (Files.exists(toolsJar)) {
@@ -96,20 +94,21 @@ public final class StsServiceDefinitionBuilder {
                     classPathBuilder.append(File.pathSeparator).append(toolsJar);
                 }
             }
-            //classPathBuilder.append("\'");
             final String javaExePath = javaHomePath.resolve(Paths.get("bin", javaExecutable))
                     .toString();
 
             final ImmutableList.Builder<String> commandBuilder = ImmutableList.builder();
             commandBuilder.add(javaExePath);
-            commandBuilder.add("-classpath").add(classPathBuilder.toString());
+            if(classPathBuilder.length() > 0) {
+                commandBuilder.add("-classpath").add(classPathBuilder.toString());
+            }
 
             if (debug) {
                 commandBuilder.add("-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044");
             }
             //commandBuilder.add("-Dlanguageserver.boot.enable-jandex-index=true");
-            commandBuilder.add("-Dsts.lsp.client=vscode");
-            commandBuilder.add(LAUNCHER);
+            //commandBuilder.add("-Dsts.lsp.client=vscode");
+            commandBuilder.add("-jar").add(new File(root, "lib/server/language-server.jar").getPath());
 
             if (serverListenerEnabled) {
                 return new StsListenableServerDefinition(extensions,

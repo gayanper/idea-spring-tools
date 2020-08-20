@@ -25,6 +25,7 @@
 package org.gap.ijplugins.spring.tools.java;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.intellij.ProjectTopics;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.ModuleManager;
@@ -61,13 +62,12 @@ public class ClasspathListener {
     private static final Logger LOGGER = Logger.getInstance(ClasspathListener.class);
     private static final VirtualFile[] EMPTY_VIRTUAL_FILES = new VirtualFile[0];
 
-    private String callbackCommandId;
-    private Project project;
+    private final String callbackCommandId;
+    private final Project project;
     private RequestManager requestManager;
     private MessageBusConnection messageBusConnection;
-    private LSModuleRootListener moduleRootListener;
 
-    private Object requestManagerSync = new Object();
+    private final Object requestManagerSync = new Object();
 
     private ClasspathListener(String callbackCommandId, Project project) {
         this.callbackCommandId = callbackCommandId;
@@ -81,9 +81,9 @@ public class ClasspathListener {
     public void register(RequestManager requestManager) {
         this.requestManager = requestManager;
         messageBusConnection = project.getMessageBus().connect(project);
-        moduleRootListener = new LSModuleRootListener();
+        LSModuleRootListener moduleRootListener = new LSModuleRootListener();
         messageBusConnection.subscribe(ProjectTopics.PROJECT_ROOTS, moduleRootListener);
-        List<CPE> list = runReadAction(this::collectCPEs);
+        Set<CPE> list = runReadAction(this::collectCPEs);
         sendClasspathCommand(list, false);
         moduleRootListener.updateBefore(list);
     }
@@ -96,16 +96,16 @@ public class ClasspathListener {
         }
     }
 
-    private List<CPE> collectCPEs() {
+    private Set<CPE> collectCPEs() {
         final ProjectRootManager projectRootManager = ProjectRootManager.getInstance(project);
-        final List<CPE> cpes = new ArrayList<>();
+        final Set<CPE> cpes = new HashSet<>();
 
         Arrays.asList(ModuleManager.getInstance(project).getModules()).forEach(m -> {
             final ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(m);
             final String outputUrl = CommonUtils.outputDir(m);
             final String testOutputUrl = CommonUtils.testOutputDir(m);
 
-            if(outputUrl != null) {
+            if (outputUrl != null) {
                 moduleRootManager.getSourceRoots(JavaSourceRootType.SOURCE).stream()
                         .map(f -> mapSourceRoot(f, outputUrl, true, false)).forEach(cpes::add);
                 moduleRootManager.getSourceRoots(JavaResourceRootType.RESOURCE).stream()
@@ -114,7 +114,7 @@ public class ClasspathListener {
                 LOGGER.debug("outputUrl is null for module " + m.getName());
             }
 
-            if(testOutputUrl != null) {
+            if (testOutputUrl != null) {
                 moduleRootManager.getSourceRoots(JavaSourceRootType.TEST_SOURCE).stream()
                         .map(f -> mapSourceRoot(f, testOutputUrl, true, true)).forEach(cpes::add);
                 moduleRootManager.getSourceRoots(JavaResourceRootType.TEST_RESOURCE).stream()
@@ -150,15 +150,15 @@ public class ClasspathListener {
         }).orElse(ort -> EMPTY_VIRTUAL_FILES);
     }
 
-    private void processLibrary(List<CPE> cpes, boolean sdk, Function<OrderRootType, VirtualFile[]> files) {
-        String sourcePath = fromFirst(files.apply(OrderRootType.SOURCES), f -> f.getUrl()).orElse("");
-        String javadocPath = fromFirst(files.apply(OrderRootType.DOCUMENTATION), f -> f.getUrl()).orElse("");
+    private void processLibrary(Set<CPE> cpes, boolean sdk, Function<OrderRootType, VirtualFile[]> files) {
+        String sourcePath = fromFirst(files.apply(OrderRootType.SOURCES), VirtualFile::getUrl).orElse("");
+        String javadocPath = fromFirst(files.apply(OrderRootType.DOCUMENTATION), VirtualFile::getUrl).orElse("");
 
         Arrays.stream(files.apply(OrderRootType.CLASSES)).map(f -> {
             CPE cpe = toBinaryCPE(f);
             try {
-                cpe.setJavadocContainerUrl(new File(javadocPath).toURL());
-                cpe.setSourceContainerUrl(new File(sourcePath).toURL());
+                cpe.setJavadocContainerUrl(new File(javadocPath).toURI().toURL());
+                cpe.setSourceContainerUrl(new File(sourcePath).toURI().toURL());
             } catch (MalformedURLException e) {
                 LOGGER.error(e.getMessage(), e);
             }
@@ -179,18 +179,22 @@ public class ClasspathListener {
     }
 
     private void sendClasspathCommand(Collection<CPE> entries, boolean deleted) {
+        if(entries.isEmpty()) {
+            return;
+        }
+
         ExecuteCommandParams commandParams = new ExecuteCommandParams();
         commandParams.setCommand(callbackCommandId);
 
         Classpath classpath = new Classpath(Lists.newArrayList(entries));
         commandParams.setArguments(ClasspathArgument.argument(project.getName())
-                .projectUri(FileUtils.projectToUri(project)).classpath(classpath).arguments());
+                .projectUri(FileUtils.projectToUri(project)).classpath(classpath).deleted(deleted).arguments());
 
         synchronized (requestManagerSync) {
-            if(requestManager != null) {
+            if (requestManager != null) {
                 CompletableFuture<Object> result =
-                       Optional.ofNullable(requestManager.executeCommand(commandParams))
-                               .orElse(CompletableFuture.completedFuture("stopped"));
+                        Optional.ofNullable(requestManager.executeCommand(commandParams))
+                                .orElse(CompletableFuture.completedFuture("stopped"));
                 try {
                     if (!"stopped".equals(result.get()) && !"done".equals(result.get())) {
                         LOGGER.error("executeCommand failed for callback " + callbackCommandId
@@ -204,8 +208,8 @@ public class ClasspathListener {
     }
 
     private class LSModuleRootListener implements ModuleRootListener {
-        private List<CPE> before = Collections.emptyList();
-        private Object lock = new Object();
+        private Set<CPE> before = Collections.emptySet();
+        private final Object lock = new Object();
 
         @Override
         public void rootsChanged(@NotNull ModuleRootEvent event) {
@@ -214,16 +218,16 @@ public class ClasspathListener {
             // given time.
             executeOnIntellijPooledThread(() -> {
                 synchronized (lock) {
-                    sendClasspathCommand(before, true);
-                    List<CPE> after = runReadAction(ClasspathListener.this::collectCPEs);
-                    sendClasspathCommand(after, false);
+                    Set<CPE> after = runReadAction(ClasspathListener.this::collectCPEs);
+                    sendClasspathCommand(Sets.difference(before, after), true);
+                    sendClasspathCommand(Sets.difference(after, before), false);
                     updateBefore(after);
                 }
                 return null;
             });
         }
 
-        public void updateBefore(List<CPE> before) {
+        public void updateBefore(Set<CPE> before) {
             this.before = before;
         }
     }

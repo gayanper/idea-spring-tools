@@ -99,7 +99,7 @@ release {
 
 tasks {
     afterReleaseBuild {
-        publishPlugin
+        dependsOn("publishPlugin")
     }
 
     publishPlugin {

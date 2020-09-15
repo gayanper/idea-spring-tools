@@ -42,6 +42,7 @@ intellij {
     pluginName = "idea-spring-tools"
     setPlugins("IntelliLang", "java")
 }
+
 tasks {
     compileKotlin {
         kotlinOptions.jvmTarget = "1.8"
@@ -93,4 +94,15 @@ release {
     failOnUnversionedFiles = false
     failOnSnapshotDependencies = false
     tagTemplate = "$version"
+    buildTasks = arrayListOf("buildPlugin")
+}
+
+tasks {
+    afterReleaseBuild {
+        publishPlugin
+    }
+
+    publishPlugin {
+        setToken(System.getenv("JB_API_KEY"))
+    }
 }

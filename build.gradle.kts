@@ -12,9 +12,9 @@ plugins {
 
 group = "org.gap.ijplugins.spring.ideaspringtools"
 
-var publishVersion = version
-if(version.toString().endsWith("SNAPSHOT")) {
-    publishVersion = version.toString().replace("SNAPSHOT", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd.HH.mm.ss.SSS")))
+var publishVersion: String = version.toString()
+if(publishVersion.endsWith("SNAPSHOT")) {
+    publishVersion = publishVersion.replace("SNAPSHOT", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd.HH.mm.ss.SSS")))
 }
 
 repositories {
@@ -81,7 +81,7 @@ bintray {
         userOrg = System.getenv("BINTRAY_USER")
         vcsUrl = "https://github.com/gayanper/idea-spring-tools"
         version(delegateClosureOf<com.jfrog.bintray.gradle.BintrayExtension.VersionConfig> {
-            name = publishVersion.toString()
+            name = publishVersion
         })
 
         filesSpec(delegateClosureOf<com.jfrog.bintray.gradle.tasks.RecordingCopyTask> {

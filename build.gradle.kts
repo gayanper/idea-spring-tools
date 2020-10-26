@@ -107,4 +107,8 @@ tasks {
     publishPlugin {
         setToken(System.getenv("JB_API_KEY"))
     }
+
+    runIde {
+        setJvmArgs(listOf("-Dsts4.jvmargs=-Xmx512 -Xms512"))
+    }
 }

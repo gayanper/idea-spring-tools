@@ -87,6 +87,7 @@ bintray {
         filesSpec(delegateClosureOf<com.jfrog.bintray.gradle.tasks.RecordingCopyTask> {
             from("build/distributions")
             into(".")
+            rename("SNAPSHOT", publishVersion)
         })
 
     })

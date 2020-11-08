@@ -24,6 +24,7 @@
 
 package org.gap.ijplugins.spring.tools.extensions;
 
+import org.eclipse.lsp4j.SymbolInformation;
 import org.eclipse.lsp4j.SymbolKind;
 import org.gap.ijplugins.spring.tools.graphics.StsIcons;
 import org.wso2.lsp4intellij.contributors.icon.LSPDefaultIconProvider;
@@ -32,10 +33,15 @@ import javax.swing.*;
 
 public class StsIconProvider extends LSPDefaultIconProvider {
     @Override
-    public Icon getSymbolIcon(SymbolKind kind) {
-        if (kind == SymbolKind.Interface) {
-            return StsIcons.getBeanIcon();
+    public Icon getSymbolIcon(SymbolInformation information) {
+        if (information.getKind() == SymbolKind.Interface) {
+            switch (information.getName().substring(0, 2)) {
+                case "@/":
+                    return StsIcons.getRequestMappingIcon();
+                default:
+                    return StsIcons.getBeanIcon();
+            }
         }
-        return super.getSymbolIcon(kind);
+        return super.getSymbolIcon(information);
     }
 }

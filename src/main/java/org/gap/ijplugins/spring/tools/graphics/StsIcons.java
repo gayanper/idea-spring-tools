@@ -33,7 +33,7 @@ import javax.swing.*;
 public final class StsIcons {
     private static final Supplier<Icon> bootIcon = Suppliers.memoize(() -> IconLoader.getIcon("/icons/boot-icon.png"));
 
-    private static final Supplier<Icon> beanIcon = Suppliers.memoize(() -> IconLoader.getIcon("/icons/spring-bean.svn"));
+    private static final Supplier<Icon> beanIcon = Suppliers.memoize(() -> IconLoader.getIcon("/icons/spring-bean.svg"));
 
     private static final Supplier<Icon> requestMappingIcon = Suppliers.memoize(() -> IconLoader.getIcon("/icons/spring-request-mapping.svg"));
 

@@ -2,6 +2,7 @@ import org.jetbrains.intellij.tasks.PatchPluginXmlTask
 import org.jetbrains.intellij.tasks.PrepareSandboxTask
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.io.ByteArrayOutputStream
 
 plugins {
     id("org.jetbrains.intellij") version "0.4.16"
@@ -92,6 +93,44 @@ bintray {
 
     })
 }
+
+
+tasks {
+    bintrayUpload {
+        doFirst() {
+            val bout: ByteArrayOutputStream = ByteArrayOutputStream()
+            exec {
+                commandLine = ("curl -s -o /dev/null -w %{http_code} " +
+                        "-u ${System.getenv("BINTRAY_USER")}:${System.getenv("BINTRAY_API_KEY")} " +
+                        "-X DELETE https://api.bintray.com/content/${System.getenv("BINTRAY_USER")}/${intellij.pluginName}/updatePlugins.xml").split(" ")
+                standardOutput = bout
+            }
+            val result = String(bout.toByteArray())
+
+            if(result != "404" && result != "200") {
+                throw GradleException(String.format("Couldn't delete the updatePlugins.xml, result was %s", result))
+            }
+        }
+    }
+
+
+    buildPlugin {
+        doLast() {
+            val content = """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <plugins>
+                    <plugin id="org.gap.ijplugins.spring.idea-spring-tools" url="https://dl.bintray.com/gayanper/idea-spring-tools/${intellij.pluginName}-${project.version}-.zip"
+                        version="${project.version}">
+                        <idea-version since-build="183.2940.10" until-build="203.*" />
+                    </plugin>
+                </plugins>                
+                
+            """.trimIndent()
+            file("build/distributions/updatePlugins.xml").writeText(content)
+        }
+    }
+}
+
 
 release {
     failOnUnversionedFiles = false

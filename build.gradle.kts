@@ -55,7 +55,7 @@ tasks {
     }
 }
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
-    setUntilBuild("203.*")
+    setUntilBuild("213.*")
     setSinceBuild("193.*")
 }
 
@@ -119,9 +119,9 @@ tasks {
             val content = """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <plugins>
-                    <plugin id="org.gap.ijplugins.spring.idea-spring-tools" url="https://dl.bintray.com/gayanper/idea-spring-tools/${intellij.pluginName}-${project.version}-.zip"
+                    <plugin id="org.gap.ijplugins.spring.idea-spring-tools" url="https://dl.bintray.com/gayanper/idea-spring-tools/${intellij.pluginName}-${publishVersion}-.zip"
                         version="${project.version}">
-                        <idea-version since-build="183.2940.10" until-build="203.*" />
+                        <idea-version since-build="183.2940.10" until-build="213.*" />
                     </plugin>
                 </plugins>                
                 

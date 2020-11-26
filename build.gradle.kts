@@ -149,6 +149,6 @@ tasks {
     }
 
     runIde {
-        setJvmArgs(listOf("-Dsts4.jvmargs=-Xmx512 -Xms512"))
+        setJvmArgs(listOf("-Dsts4.jvmargs=-Xmx512m -Xms512m"))
     }
 }

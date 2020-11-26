@@ -99,6 +99,7 @@ public final class StsServiceDefinitionBuilder {
 
             final ImmutableList.Builder<String> commandBuilder = ImmutableList.builder();
             commandBuilder.add(javaExePath);
+            commandBuilder.addAll(Arrays.asList(System.getProperty("sts4.jvmargs", "").split(" ")));
             if(classPathBuilder.length() > 0) {
                 commandBuilder.add("-classpath").add(classPathBuilder.toString());
             }
@@ -109,7 +110,6 @@ public final class StsServiceDefinitionBuilder {
             //commandBuilder.add("-Dlanguageserver.boot.enable-jandex-index=true");
             //commandBuilder.add("-Dsts.lsp.client=vscode");
             commandBuilder.add("-jar").add(new File(root, "lib/server/language-server.jar").getPath());
-            commandBuilder.addAll(Arrays.asList(System.getProperty("sts4.jvmargs", "").split(" ")));
 
             if (serverListenerEnabled) {
                 return new StsListenableServerDefinition(extensions,

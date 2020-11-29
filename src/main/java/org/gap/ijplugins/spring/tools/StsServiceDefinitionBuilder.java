@@ -28,6 +28,7 @@ import com.google.common.collect.ImmutableList;
 import com.intellij.ide.plugins.PluginManagerCore;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.PluginId;
+import org.gap.ijplugins.spring.tools.configuration.StsSettingsProvider;
 import org.wso2.lsp4intellij.client.languageserver.serverdefinition.RawCommandServerDefinition;
 
 import java.io.File;
@@ -99,7 +100,7 @@ public final class StsServiceDefinitionBuilder {
 
             final ImmutableList.Builder<String> commandBuilder = ImmutableList.builder();
             commandBuilder.add(javaExePath);
-            commandBuilder.addAll(Arrays.asList(System.getProperty("sts4.jvmargs", "").split(" ")));
+            commandBuilder.addAll(Arrays.asList(StsSettingsProvider.INSTANCE.getSettings().getJvmArgs().split(" ")));
             if(classPathBuilder.length() > 0) {
                 commandBuilder.add("-classpath").add(classPathBuilder.toString());
             }

@@ -119,7 +119,7 @@ tasks {
             val content = """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <plugins>
-                    <plugin id="org.gap.ijplugins.spring.idea-spring-tools" url="https://dl.bintray.com/gayanper/idea-spring-tools/${intellij.pluginName}-${publishVersion}-.zip"
+                    <plugin id="org.gap.ijplugins.spring.idea-spring-tools" url="https://dl.bintray.com/gayanper/idea-spring-tools/${intellij.pluginName}-${publishVersion}.zip"
                         version="${publishVersion}">
                         <idea-version since-build="183.2940.10" until-build="213.*" />
                     </plugin>

@@ -13,9 +13,8 @@ plugins {
 
 group = "org.gap.ijplugins.spring.ideaspringtools"
 
-var publishVersion: String = version.toString()
-if(publishVersion.endsWith("SNAPSHOT")) {
-    publishVersion = publishVersion.replace("SNAPSHOT", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd.HH.mm.ss.SSS")))
+if(version.toString().endsWith("SNAPSHOT")) {
+    version = version.toString().replace("SNAPSHOT", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd.HH.mm.ss.SSS")))
 }
 
 repositories {
@@ -82,13 +81,12 @@ bintray {
         userOrg = System.getenv("BINTRAY_USER")
         vcsUrl = "https://github.com/gayanper/idea-spring-tools"
         version(delegateClosureOf<com.jfrog.bintray.gradle.BintrayExtension.VersionConfig> {
-            name = publishVersion
+            name = version.toString()
         })
 
         filesSpec(delegateClosureOf<com.jfrog.bintray.gradle.tasks.RecordingCopyTask> {
             from("build/distributions")
             into(".")
-            rename(project.version.toString(), publishVersion)
         })
 
     })
@@ -119,8 +117,8 @@ tasks {
             val content = """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <plugins>
-                    <plugin id="org.gap.ijplugins.spring.idea-spring-tools" url="https://dl.bintray.com/gayanper/idea-spring-tools/${intellij.pluginName}-${publishVersion}.zip"
-                        version="${publishVersion}">
+                    <plugin id="org.gap.ijplugins.spring.idea-spring-tools" url="https://dl.bintray.com/gayanper/idea-spring-tools/${intellij.pluginName}-${version}.zip"
+                        version="${version}">
                         <idea-version since-build="183.2940.10" until-build="213.*" />
                     </plugin>
                 </plugins>                

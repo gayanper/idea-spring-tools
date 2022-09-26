@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter
 import java.io.ByteArrayOutputStream
 
 plugins {
-    id("org.jetbrains.intellij") version "1.7.0"
+    id("org.jetbrains.intellij") version "1.9.0"
     kotlin("jvm") version "1.7.10"
     id("net.researchgate.release") version "2.8.1"
 }
@@ -38,7 +38,7 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version.set("2022.1")
+    version.set("2022.2")
     type.set("IC")
     pluginName.set("idea-spring-tools")
     plugins.set(listOf("IntelliLang", "java"))
@@ -54,8 +54,8 @@ tasks {
     }
 }
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
-    untilBuild.set("233.*")
-    sinceBuild.set("193.*")
+    untilBuild.set("243.*")
+    sinceBuild.set("183.*")
 }
 
 tasks.getByName<PrepareSandboxTask>("prepareSandbox").doLast {

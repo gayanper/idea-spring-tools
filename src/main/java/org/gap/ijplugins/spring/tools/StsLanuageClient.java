@@ -46,10 +46,7 @@ import org.gap.ijplugins.spring.tools.highlight.HighlightProcessor;
 import org.gap.ijplugins.spring.tools.highlight.InlayHighlightProcessor;
 import org.gap.ijplugins.spring.tools.highlight.RangeHighlightProcessor;
 import org.gap.ijplugins.spring.tools.java.*;
-import org.springframework.ide.vscode.commons.protocol.CursorMovement;
-import org.springframework.ide.vscode.commons.protocol.HighlightParams;
-import org.springframework.ide.vscode.commons.protocol.ProgressParams;
-import org.springframework.ide.vscode.commons.protocol.STS4LanguageClient;
+import org.springframework.ide.vscode.commons.protocol.*;
 import org.springframework.ide.vscode.commons.protocol.java.*;
 import org.wso2.lsp4intellij.client.ClientContext;
 import org.wso2.lsp4intellij.client.DefaultLanguageClient;
@@ -90,7 +87,6 @@ class StsLanuageClient extends DefaultLanguageClient implements STS4LanguageClie
         params.getCodeLenses()
                 .forEach(l -> processors.forEach(p -> p.process(documentUri, l, editor)));
     }
-
 
     @Override
     public void highlight(HighlightParams params) {

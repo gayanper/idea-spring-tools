@@ -25,6 +25,9 @@
                            implementationClass="org.wso2.lsp4intellij.contributors.annotator.LSPAnnotator" language="yaml"/>
         <applicationConfigurable instance="org.gap.ijplugins.spring.tools.configuration.StsConfiguration" id="sts.configuration" />
         <applicationService serviceImplementation="org.gap.ijplugins.spring.tools.configuration.StsConfigurationStore"/>
+        <statusBarWidgetFactory implementation="org.wso2.lsp4intellij.statusbar.LSPServerStatusWidgetFactory"
+                                id="org.wso2.lsp4intellij.statusbar.LSPServerStatusWidgetFactory"
+                                order="first" />
     </extensions>
 
     <application-components>

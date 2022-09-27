@@ -89,4 +89,9 @@ public class StsPreloadingActivity extends PreloadingActivity {
         return;
     }
 
+    @Override
+    public void preload(@Nullable ProgressIndicator indicator) {
+        // backward compatibility
+        this.preload();
+    }
 }

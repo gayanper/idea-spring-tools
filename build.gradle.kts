@@ -55,7 +55,7 @@ tasks {
 }
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
     untilBuild.set("243.*")
-    sinceBuild.set("183.*")
+    sinceBuild.set("221.*")
 }
 
 tasks.getByName<PrepareSandboxTask>("prepareSandbox").doLast {
@@ -81,7 +81,7 @@ tasks {
                 <plugins>
                     <plugin id="org.gap.ijplugins.spring.idea-spring-tools" url="https://dl.bintray.com/gayanper/idea-spring-tools/${intellij.pluginName}-${version}.zip"
                         version="${version}">
-                        <idea-version since-build="183.2940.10" until-build="243.*" />
+                        <idea-version since-build="222.*" until-build="243.*" />
                     </plugin>
                 </plugins>                
                 

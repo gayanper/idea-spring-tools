@@ -53,17 +53,16 @@ public class StsPreloadingActivity extends PreloadingActivity {
     private static final String PTRN_CONTEXT_XML = "xml";
     private static final String PTRN_APPLICATION_PROPERTIES = "application.*\\.properties";
 
-    @Nullable
     @Override
-    public Object execute(@NotNull Continuation<? super Unit> $completion) {
+    public void preload() {
         if (Strings.isNullOrEmpty(System.getProperty(EXT_PTRN_JAVA + ".home"))) {
             LOGGER.error("No java home found in system properties");
-            return null;
+            return;
         }
 
         if (Prerequisities.isBelowJava8()) {
             LOGGER.error("Unsupported java version, 1.8 or above is required");
-            return null;
+            return;
         }
 
         IntellijLanguageClient.setTimeout(Timeouts.INIT, 60000);
@@ -87,6 +86,7 @@ public class StsPreloadingActivity extends PreloadingActivity {
 
         StsLspExtensionManager extensionManager = new StsLspExtensionManager();
         extensions.forEach(e -> IntellijLanguageClient.addExtensionManager(e, extensionManager));
-        return null;
+        return;
     }
+
 }

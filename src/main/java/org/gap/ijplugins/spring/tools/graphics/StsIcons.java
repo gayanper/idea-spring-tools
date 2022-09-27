@@ -31,11 +31,14 @@ import com.intellij.openapi.util.IconLoader;
 import javax.swing.*;
 
 public final class StsIcons {
-    private static final Supplier<Icon> bootIcon = Suppliers.memoize(() -> IconLoader.getIcon("/icons/boot-icon.png"));
+    private static final Supplier<Icon> bootIcon = Suppliers.memoize(() -> IconLoader.getIcon("/icons/boot-icon.png",
+            StsIcons.class.getClassLoader()));
 
-    private static final Supplier<Icon> beanIcon = Suppliers.memoize(() -> IconLoader.getIcon("/icons/spring-bean.svg"));
+    private static final Supplier<Icon> beanIcon = Suppliers.memoize(() -> IconLoader.getIcon("/icons/spring-bean.svg",
+            StsIcons.class.getClassLoader()));
 
-    private static final Supplier<Icon> requestMappingIcon = Suppliers.memoize(() -> IconLoader.getIcon("/icons/spring-request-mapping.svg"));
+    private static final Supplier<Icon> requestMappingIcon = Suppliers.memoize(() -> IconLoader.getIcon("/icons/spring-request-mapping.svg",
+            StsIcons.class.getClassLoader()));
 
     private StsIcons() {
     }

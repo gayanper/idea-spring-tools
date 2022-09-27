@@ -38,10 +38,10 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version.set("2022.2")
+    version.set("223-EAP-SNAPSHOT")
     type.set("IC")
     pluginName.set("idea-spring-tools")
-    plugins.set(listOf("IntelliLang", "java"))
+    plugins.set(listOf("java"))
     updateSinceUntilBuild.set(true)
 }
 

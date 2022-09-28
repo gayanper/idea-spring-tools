@@ -69,10 +69,6 @@ tasks.getByName<PrepareSandboxTask>("prepareSandbox").doLast {
     }
 }
 
-tasks.getByName<RunIdeTask>("runIde") {
-    jbrVersion.set("17.0.3b469.37")
-}
-
 tasks {
     buildPlugin {
         doLast() {
@@ -90,16 +86,13 @@ tasks {
         }
     }
 
-    afterReleaseBuild {
-        dependsOn("publishPlugin")
-    }
-
     publishPlugin {
         token.set(System.getenv("JB_API_KEY"))
     }
 
     runIde {
         setJvmArgs(listOf("-Dsts4.jvmargs=-Xmx512m -Xms512m"))
+        jbrVersion.set("17.0.3b469.37")
     }
 }
 

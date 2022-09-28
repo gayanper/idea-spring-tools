@@ -24,7 +24,6 @@
 package org.gap.ijplugins.spring.tools.configuration;
 
 import com.intellij.ui.components.fields.ExpandableTextField;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 

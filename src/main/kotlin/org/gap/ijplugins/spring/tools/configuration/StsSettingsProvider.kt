@@ -25,7 +25,6 @@
 package org.gap.ijplugins.spring.tools.configuration
 
 import com.intellij.openapi.components.ServiceManager
-import com.intellij.openapi.project.Project
 
 object StsSettingsProvider {
     fun getSettings(): StsSettings {
